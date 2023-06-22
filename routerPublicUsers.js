@@ -17,6 +17,8 @@ routerPublicUsers.post("/verification",async(req,res)=>{
 
     try{
         const user= await database.query("SELECT * FROM user where email= ? and password= ?", [emailUser, password])
+        const userEmail= await database.query("SELECT * FROM user where email= ?", [emailUser])
+
         if(user.length>=1 ){
 
  
@@ -31,18 +33,24 @@ routerPublicUsers.post("/verification",async(req,res)=>{
             database.disConnect()
             return res.send(
             {
-                messege:"user",
+                message:"user",
                 apiKey: apiKey,
                 name:user[0].name,
                 userId: user[0].id,
                 email: user[0].email,
 
             })
-        }else if(user.length==0){
+        }else if(userEmail.length>0){
             database.disConnect()
             return res.send(
             {
-                messege:"Incorrect password or email"
+                message:"Incorrect password"
+            })
+        }else if(userEmail.length==0){
+            database.disConnect()
+            return res.send(
+            {
+                message:"Incorrect email"
             })
         }
     }catch(error){
