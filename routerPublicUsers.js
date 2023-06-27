@@ -64,8 +64,7 @@ routerPublicUsers.post("/",async(req,res)=>{
     let email = req.body.email
     let password = req.body.password
     let name =  req.body.name
-    let breed= req.body.breed
-    let date=req.body.date
+
     let cipher = crypto.createCipher(algorithm, keyEncrypt);
     let passwordEncript = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
     
@@ -81,7 +80,7 @@ routerPublicUsers.post("/",async(req,res)=>{
                 error: "error in email"
             })
         }else{
-                await database.query("INSERT INTO user (name, password, email, breed, date) VALUES  (?, ?, ?, ?, ?) ", [name, passwordEncript,email,breed, date])
+                await database.query("INSERT INTO user (name, password, emai) VALUES  (?, ?, ?) ", [name, passwordEncript,emai])
                 const user= await database.query("SELECT * FROM user where email=? and password=?", [email, passwordEncript])   
                 if(user.length>=1){
         
